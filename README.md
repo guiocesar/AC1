@@ -1,5 +1,5 @@
 # AC1
-# Feito por Herick Marlon e Victor Gabriel
+# Feito por Guilherme Cesar e Carlos Eduardo
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.0.
 
