@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Blog</title>
+    <link rel="stylesheet" href="blog-component.css">
+</head>
+<body>
+    <div class="blog-container">
+        <h1> YouFace </h1>
+        <div id="posts-container">
+            
+        </div>
+    </div>
+
+    <script>
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let posts = [
+            {
+                titulo: 'Meu Primeiro Jogo',
+                autor: 'João Lucas',
+                dataPublicacao: new Date(2025, 8, 15),
+                conteudo: 'Meu primeiro jogo foi Super Mario World de NES e o de vocês',
+                curtidas: 0,
+                comentarios: [],
+                novoComentario: ''
+            },
+            {
+                titulo: 'Me ajudem a fazer a Atividade de Java',
+                autor: 'Jessica',
+                dataPublicacao: new Date(2025, 8, 15),
+                conteudo: 'Está dando error no meu código de Java de String tem alguém que pode me ajudar?',
+                curtidas: 0,
+                comentarios: [],
+                novoComentario: ''
+            },
+            {
+                titulo: 'Qual é o melhor pais para viajar?',
+                autor: 'Claudio',
+                dataPublicacao: new Date(2025, 8, 15),
+                conteudo: 'Estou em dúvida de viajar entre a França e a Holanda, alguém pode me ajudar nessa decisão?',
+                curtidas: 0,
+                comentarios: [],
+                novoComentario: ''
+            }
+        ];
+
+        const postsContainer = document.getElementById('posts-container');
+
+        function renderPosts() {
+            postsContainer.innerHTML = ''; // Limpa o container antes de renderizar novamente
+            posts.forEach((post, index) => {
+                const postCard = document.createElement('div');
+                postCard.className = 'post-card';
+                postCard.innerHTML = `
+                    <h2 class="post-title">${post.titulo}</h2>
+                    <div class="post-meta">
+                        <span>Por: <strong>${post.autor}</strong></span>
+                        <span>Publicado em: <strong>${post.dataPublicacao.toLocaleDateString('pt-BR')}</strong></span>
+                    </div>
+                    <p class="post-content">${post.conteudo}</p>
+
+                    <div class="post-actions">
+                        <button class="like-button" data-post-index="${index}" title="Curtir o post: ${post.titulo}">
+                            Curtir
+                        </button>
+                        <span class="likes-badge">${post.curtidas} Curtida(s)</span>
+                    </div>
+
+                    <div class="comments-section">
+                        <h4>Comentários</h4>
+                        <ul class="comments-list">
+                            ${post.comentarios.length === 0 
+                                ? '<li class="no-comments">Seja o primeiro a comentar!</li>'
+                                : post.comentarios.map(comment => `<li>${comment}</li>`).join('')
+                            }
+                        </ul>
+                        <div class="comment-form">
+                            <input
+                                type="text"
+                                placeholder="Adicione um comentário..."
+                                class="comment-input"
+                                data-post-index="${index}"
+                            />
+                            <button class="comment-button" data-post-index="${index}">
+                                Comentar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                postsContainer.appendChild(postCard);
+            });
+
+            // Adiciona event listeners para os botões de curtir
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const postIndex = event.target.dataset.postIndex;
+                    posts[postIndex].curtidas++;
+                    renderPosts();
+                });
+            });
+
+            // Adiciona event listeners para os botões de comentar
+            document.querySelectorAll('.comment-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const postIndex = event.target.dataset.postIndex;
+                    const commentInput = document.querySelector(`.comment-input[data-post-index="${postIndex}"]`);
+                    if (commentInput.value.trim()) {
+                        posts[postIndex].comentarios.push(commentInput.value.trim());
+                        commentInput.value = '';
+                        renderPosts();
+                    }
+                });
+            });
+
+            // Adiciona event listeners para o enter no campo de comentário
+            document.querySelectorAll('.comment-input').forEach(input => {
+                input.addEventListener('keyup', (event) => {
+                    if (event.key === 'Enter') {
+                        const postIndex = event.target.dataset.postIndex;
+                        const commentButton = document.querySelector(`.comment-button[data-post-index="${postIndex}"]`);
+                        commentButton.click();
+                    }
+                });
+            });
+        }
+
+        renderPosts();
+    });
+</script>
+
+
